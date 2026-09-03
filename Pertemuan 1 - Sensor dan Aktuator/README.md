@@ -153,7 +153,7 @@ Pada Percobaan 2, DHT11 dipasang ke NodeMCU ESP8266 dan relay atau LED dipasang 
 
 ## Skematik atau Diagram Rangkaian
 
-### Percobaan 1: NodeMCU dan DHT11
+### Percobaan 1
 
 ```text
 NodeMCU ESP8266       DHT11
@@ -162,7 +162,7 @@ GND ------------------ GND
 D4 / GPIO2 ----------- DATA
 ```
 
-### Percobaan 2: ESP8266, DHT11, dan Relay atau LED
+### Percobaan 2
 
 ```text
 NodeMCU ESP8266       DHT11
