@@ -44,7 +44,7 @@ Library DHT dipanggil dengan perintah `#include <DHT.h>`
 
 ## Jawaban Pertanyaan Praktikum yang Berkaitan dengan Code
 
-### Percobaan 1: Akuisisi Data DHT11
+### Percobaan 1
 
 #### 1. Diagram Alur
 
@@ -96,7 +96,7 @@ if (pembacaanValid > 0) {                  // Memastikan ada data yang bisa dihi
 
 `totalSuhu` dan `totalKelembaban` dipakai untuk menjumlahkan data. `pembacaanValid` dipakai sebagai pembagi agar data yang gagal tidak ikut memengaruhi rata-rata. Perulangan `for` menjalankan lima kali pembacaan, lalu hasilnya dibagi dengan jumlah pembacaan yang berhasil
 
-### Percobaan 2: Threshold dan Histerisis
+### Percobaan 2
 
 #### 1. Fungsi Nilai Threshold
 
