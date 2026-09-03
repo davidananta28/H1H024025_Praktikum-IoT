@@ -1,8 +1,8 @@
 #include <DHT.h>
 
-#define DHTPIN 4 // pin data DHT22 terhubung ke GPIO 4
-#define DHTTYPE DHT22
-#define RELAYPIN 26 // pin kendali relay/LED indikator
+#define DHTPIN D4 // pin data DHT11 terhubung ke D4 pada NodeMCU
+#define DHTTYPE DHT11
+#define RELAYPIN D1 // pin kendali relay/LED indikator
 
 DHT dht(DHTPIN, DHTTYPE);
 

@@ -1,7 +1,7 @@
 #include <DHT.h>
 
 #define DHTPIN D4      // GPIO2 di NodeMCU
-#define DHTTYPE DHT11  // ganti dari DHT22 ke DHT11
+#define DHTTYPE DHT11
 
 DHT dht(DHTPIN, DHTTYPE);
 
