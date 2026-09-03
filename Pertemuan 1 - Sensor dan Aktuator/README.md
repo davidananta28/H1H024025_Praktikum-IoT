@@ -45,28 +45,13 @@ Library DHT dipanggil dengan perintah `#include <DHT.h>`.
 
 ## Jawaban Pertanyaan Praktikum yang Berkaitan dengan Code
 
-### Percobaan 1: Akuisisi Data DHT22
+### Percobaan 1: Akuisisi Data DHT11
 
 #### 1. Diagram Alur
 
-```mermaid
-flowchart TD
-		A([Mulai]) --> B[Inisialisasi Serial dan DHT22]
-		B --> C[Siapkan total suhu, total kelembaban, dan jumlah data valid]
-		C --> D[Ambil suhu dan kelembaban]
-		D --> E{Data valid?}
-		E -- Ya --> F[Tambahkan data ke total dan jumlah data valid]
-		E -- Tidak --> G[Lewati data]
-		F --> H[Delay 2000 ms]
-		G --> H
-		H --> I{Sudah 5 pembacaan?}
-		I -- Belum --> D
-		I -- Sudah --> J{Ada data valid?}
-		J -- Ya --> K[Hitung dan tampilkan nilai rata-rata]
-		J -- Tidak --> L[Tampilkan pesan gagal]
-		K --> M([Selesai satu siklus])
-		L --> M
-```
+Berikut diagram alur proses akuisisi data sensor DHT11:
+
+![Flowchart akuisisi data sensor DHT11](images/flowchart-percobaan-1-dht11.png)
 
 #### 2. Fungsi `isnan()`
 
@@ -74,7 +59,7 @@ flowchart TD
 
 #### 3. Alasan Menggunakan `delay(2000)`
 
-Sensor DHT22 tidak dapat dibaca terus-menerus dalam waktu yang sangat singkat. Jeda sekitar 2 detik memberi waktu bagi sensor untuk menyelesaikan pengukuran dan menyiapkan data berikutnya. Tanpa jeda yang cukup, pembacaan bisa gagal atau hasilnya tidak stabil.
+Sensor DHT11 tidak dapat dibaca terus-menerus dalam waktu yang sangat singkat. Jeda sekitar 2 detik memberi waktu bagi sensor untuk menyelesaikan pengukuran dan menyiapkan data berikutnya. Tanpa jeda yang cukup, pembacaan bisa gagal atau hasilnya tidak stabil.
 
 #### 4. Modifikasi Rata-rata Lima Pembacaan
 
@@ -156,7 +141,7 @@ if (isnan(suhu)) {
 		Serial.println("Aktuator: OFF");
 	}
 }
-delay(2000);                     // Memberi jeda antar pembacaan DHT22.
+	delay(2000);                     // Memberi jeda antar pembacaan DHT11.
 ```
 
 Variabel `aktuatorON` menyimpan keadaan terakhir. Saat suhu berada di antara 28 C dan 30 C, tidak ada kondisi yang mengubah variabel tersebut, sehingga aktuator mempertahankan keadaan sebelumnya. Inilah bagian yang membuat program bekerja dengan histerisis.
