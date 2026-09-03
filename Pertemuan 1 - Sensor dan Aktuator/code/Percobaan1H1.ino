@@ -1,0 +1,29 @@
+#include <DHT.h>
+
+#define DHTPIN D4      // GPIO2 di NodeMCU
+#define DHTTYPE DHT11  // ganti dari DHT22 ke DHT11
+
+DHT dht(DHTPIN, DHTTYPE);
+
+void setup() {
+  Serial.begin(115200);
+  dht.begin();
+  Serial.println("Memulai akuisisi data sensor DHT11...");
+}
+
+void loop() {
+  float kelembaban = dht.readHumidity();
+  float suhu = dht.readTemperature();
+
+  if (isnan(kelembaban) || isnan(suhu)) {
+    Serial.println("Gagal membaca data dari sensor DHT11!");
+  } else {
+    Serial.print("Suhu: ");
+    Serial.print(suhu);
+    Serial.print(" C, Kelembaban: ");
+    Serial.print(kelembaban);
+    Serial.println(" %");
+  }
+
+  delay(500);
+}
