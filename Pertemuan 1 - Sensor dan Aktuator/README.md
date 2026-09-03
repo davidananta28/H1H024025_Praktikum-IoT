@@ -1,8 +1,6 @@
 # Pertemuan 1 - Sensor dan Aktuator
 ## Penjelasan Code
 
-Ada dua percobaan pada praktikum ini. Percobaan pertama membaca suhu dan kelembaban dari DHT11. Percobaan kedua membaca suhu dari DHT22 dan memakai hasilnya untuk mengendalikan relay atau LED.
-
 ### Percobaan 1
 
 Kode ada di [code/Percobaan1H1.ino](code/Percobaan1H1.ino). Percobaan ini menggunakan NodeMCU ESP8266 dan DHT11. Pin data sensor dipasang pada `D4` atau GPIO2. Setiap perulangan program membaca suhu dan kelembaban, lalu menampilkannya di Serial Monitor.
@@ -47,21 +45,121 @@ Library DHT dipanggil dengan perintah `#include <DHT.h>`.
 
 ## Jawaban Pertanyaan Praktikum yang Berkaitan dengan Code
 
-**Mengapa hasil sensor dicek dengan `isnan()`?**
+### Percobaan 1: Akuisisi Data DHT22
 
-Karena pembacaan sensor tidak selalu berhasil. Pengecekan ini membantu program membedakan data yang valid dan data yang gagal dibaca.
+#### 1. Diagram Alur
 
-**Kapan relay atau LED menyala?**
+```mermaid
+flowchart TD
+		A([Mulai]) --> B[Inisialisasi Serial dan DHT22]
+		B --> C[Siapkan total suhu, total kelembaban, dan jumlah data valid]
+		C --> D[Ambil suhu dan kelembaban]
+		D --> E{Data valid?}
+		E -- Ya --> F[Tambahkan data ke total dan jumlah data valid]
+		E -- Tidak --> G[Lewati data]
+		F --> H[Delay 2000 ms]
+		G --> H
+		H --> I{Sudah 5 pembacaan?}
+		I -- Belum --> D
+		I -- Sudah --> J{Ada data valid?}
+		J -- Ya --> K[Hitung dan tampilkan nilai rata-rata]
+		J -- Tidak --> L[Tampilkan pesan gagal]
+		K --> M([Selesai satu siklus])
+		L --> M
+```
 
-Relay atau LED menyala ketika suhu terbaca valid dan nilainya lebih dari 30.0 C.
+#### 2. Fungsi `isnan()`
 
-**Apa yang terjadi jika suhu tepat 30.0 C?**
+`isnan()` digunakan untuk mengecek apakah nilai suhu atau kelembaban bukan angka. Pada kode, kondisi `!isnan(suhu) && !isnan(kelembaban)` berarti data hanya dihitung jika kedua hasil pembacaan valid. Data yang gagal tidak dimasukkan ke total.
 
-Relay atau LED tetap mati karena program menggunakan operator `>`.
+#### 3. Alasan Menggunakan `delay(2000)`
 
-**Apa perbedaan kedua percobaan?**
+Sensor DHT22 tidak dapat dibaca terus-menerus dalam waktu yang sangat singkat. Jeda sekitar 2 detik memberi waktu bagi sensor untuk menyelesaikan pengukuran dan menyiapkan data berikutnya. Tanpa jeda yang cukup, pembacaan bisa gagal atau hasilnya tidak stabil.
 
-Percobaan 1 hanya membaca dan menampilkan suhu serta kelembaban. Percobaan 2 menggunakan suhu untuk mengatur aktuator.
+#### 4. Modifikasi Rata-rata Lima Pembacaan
+
+Berikut bagian program yang sudah dimodifikasi untuk mengambil lima pembacaan sebelum menampilkan hasil:
+
+```cpp
+float totalSuhu = 0;             // Menyimpan jumlah seluruh suhu yang valid.
+float totalKelembaban = 0;      // Menyimpan jumlah seluruh kelembaban yang valid.
+int pembacaanValid = 0;         // Menghitung jumlah pembacaan yang berhasil.
+
+for (int i = 0; i < 5; i++) {   // Mengulang proses pembacaan sebanyak lima kali.
+	float suhu = dht.readTemperature();
+	float kelembaban = dht.readHumidity();
+
+	if (!isnan(suhu) && !isnan(kelembaban)) { // Hanya menerima data yang valid.
+		totalSuhu += suhu;                     // Menambahkan suhu ke total.
+		totalKelembaban += kelembaban;         // Menambahkan kelembaban ke total.
+		pembacaanValid++;                      // Menambah jumlah data valid.
+	}
+	delay(2000);                             // Menunggu sebelum membaca sensor lagi.
+}
+
+if (pembacaanValid > 0) {                  // Memastikan ada data yang bisa dihitung.
+	float rataSuhu = totalSuhu / pembacaanValid;
+	float rataKelembaban = totalKelembaban / pembacaanValid;
+	Serial.print("Rata-rata Suhu: ");
+	Serial.print(rataSuhu);
+	Serial.print(" C, Rata-rata Kelembaban: ");
+	Serial.print(rataKelembaban);
+	Serial.println(" %");
+} else {
+	Serial.println("Gagal membaca data sensor!");
+}
+```
+
+`totalSuhu` dan `totalKelembaban` dipakai untuk menjumlahkan data. `pembacaanValid` dipakai sebagai pembagi agar data yang gagal tidak ikut memengaruhi rata-rata. Perulangan `for` menjalankan lima kali pembacaan, lalu hasilnya dibagi dengan jumlah pembacaan yang berhasil.
+
+### Percobaan 2: Threshold dan Histerisis
+
+#### 1. Fungsi Nilai Threshold
+
+Threshold adalah nilai pembanding untuk menentukan kapan aktuator bekerja. Pada program awal, `suhuThreshold` menjadi batas antara kondisi `ON` dan `OFF`. Dengan threshold, sensor tidak hanya menampilkan data, tetapi juga dapat dipakai untuk mengambil keputusan kendali.
+
+#### 2. Jika `suhuThreshold` Diturunkan Menjadi 20.0
+
+Aktuator akan lebih sering menyala karena suhu ruangan biasanya lebih tinggi dari 20.0 C. Aktuator hanya mati ketika suhu berada pada atau di bawah 20.0 C. Jadi, semakin rendah threshold, semakin mudah kondisi `suhu > suhuThreshold` terpenuhi.
+
+#### 3. Perbedaan Kendali Tunggal dan Histerisis
+
+Pada kendali dengan satu threshold, aktuator langsung berubah keadaan ketika suhu melewati satu batas. Jika suhu berada di sekitar batas tersebut, aktuator dapat sering hidup dan mati karena perubahan suhu kecil.
+
+Pada kendali histerisis, digunakan dua batas. Aktuator menyala saat suhu melewati batas atas, yaitu 30 C, dan baru mati saat suhu turun melewati batas bawah, yaitu 28 C. Jarak antara dua batas ini membantu mencegah aktuator terlalu sering berganti keadaan.
+
+#### 4. Modifikasi Program dengan Histerisis
+
+Berikut bagian program yang menggunakan dua threshold:
+
+```cpp
+const float suhuON = 30.0;       // Aktuator menyala jika suhu lebih dari 30 C.
+const float suhuOFF = 28.0;      // Aktuator mati jika suhu kurang dari 28 C.
+bool aktuatorON = false;         // Menyimpan keadaan aktuator sebelumnya.
+
+float suhu = dht.readTemperature();
+
+if (isnan(suhu)) {
+	Serial.println("Gagal membaca data sensor!");
+} else {
+	if (suhu > suhuON) {           // Batas atas terlewati, aktuator dinyalakan.
+		aktuatorON = true;
+	} else if (suhu < suhuOFF) {   // Batas bawah terlewati, aktuator dimatikan.
+		aktuatorON = false;
+	}
+
+	digitalWrite(RELAYPIN, aktuatorON ? HIGH : LOW); // Terapkan keadaan aktuator.
+
+	if (aktuatorON) {
+		Serial.println("Aktuator: ON");
+	} else {
+		Serial.println("Aktuator: OFF");
+	}
+}
+delay(2000);                     // Memberi jeda antar pembacaan DHT22.
+```
+
+Variabel `aktuatorON` menyimpan keadaan terakhir. Saat suhu berada di antara 28 C dan 30 C, tidak ada kondisi yang mengubah variabel tersebut, sehingga aktuator mempertahankan keadaan sebelumnya. Inilah bagian yang membuat program bekerja dengan histerisis.
 
 ## Penjelasan Singkat Detail Percobaan
 
@@ -106,7 +204,3 @@ Diagram ini mengikuti pin yang digunakan di dalam program. Sambungan daya dan mo
 ### Percobaan 2
 
 ![Rangkaian ESP atau NodeMCU, sensor DHT, dan relay](images/foto-percobaan-2-rangkaian.png)
-
-## GIF atau Video Demonstrasi
-
-GIF atau video demonstrasi belum tersedia. Tautan video dapat ditambahkan pada bagian ini setelah proses pengujian direkam.
