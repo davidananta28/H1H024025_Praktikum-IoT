@@ -76,26 +76,26 @@ Reconnect dilakukan pada bagian `loop()` ketika `WiFi.status()` bukan `WL_CONNEC
 Bagian berikut adalah modifikasi untuk Percobaan 2A agar ESP8266 otomatis mencoba kembali saat koneksi WiFi terputus. Program ini dibuat pada sketch `Modul2_Percobaan2AModif.ino`.
 
 ```cpp
-#include <ESP8266WiFi.h>
+#include <ESP8266WiFi.h>                  // Mengaktifkan library WiFi untuk ESP8266
 
-const char* ssid = "myminetae";
-const char* password = "";
+const char* ssid = "myminetae";         // Nama jaringan WiFi yang akan dihubungkan
+const char* password = "";               // Password WiFi (kosong jika jaringan terbuka)
 
-const int ledPin = 2; // LED indikator status koneksi
+const int ledPin = 2;                    // Pin GPIO2 dipakai sebagai indikator koneksi
 
 void setup() {
-  Serial.begin(115200);
+  Serial.begin(115200);                  // Memulai komunikasi Serial monitor pada baud 115200
 
-  pinMode(ledPin, OUTPUT);
-  digitalWrite(ledPin, LOW);
+  pinMode(ledPin, OUTPUT);               // Mengatur pin LED sebagai output
+  digitalWrite(ledPin, LOW);             // Menyalakan LED dalam keadaan awal mati
 
-  WiFi.mode(WIFI_STA);
-  WiFi.begin(ssid, password);
+  WiFi.mode(WIFI_STA);                   // Mengaktifkan mode station agar ESP8266 terhubung ke jaringan
+  WiFi.begin(ssid, password);            // Memulai proses koneksi ke WiFi
 
   Serial.print("Menghubungkan ke WiFi");
 
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(500);
+  while (WiFi.status() != WL_CONNECTED) { // Menunggu sampai koneksi berhasil
+    delay(500);                          // Jeda 500 ms untuk mencoba kembali
     Serial.print(".");
   }
 
@@ -103,29 +103,29 @@ void setup() {
   Serial.println("WiFi berhasil terhubung!");
 
   Serial.print("IP Address : ");
-  Serial.println(WiFi.localIP());
+  Serial.println(WiFi.localIP());         // Menampilkan alamat IP lokal setelah terhubung
 
   Serial.print("MAC Address : ");
-  Serial.println(WiFi.macAddress());
+  Serial.println(WiFi.macAddress());      // Menampilkan alamat MAC ESP8266
 
   Serial.print("RSSI : ");
-  Serial.print(WiFi.RSSI());
+  Serial.print(WiFi.RSSI());              // Membaca kekuatan sinyal WiFi
   Serial.println(" dBm");
 
-  digitalWrite(ledPin, HIGH);
+  digitalWrite(ledPin, HIGH);             // LED menyala saat koneksi berhasil
 }
 
 void loop() {
-  if (WiFi.status() != WL_CONNECTED) {
+  if (WiFi.status() != WL_CONNECTED) {    // Jika koneksi terputus, jalankan reconnect
     Serial.println("WiFi terputus!");
     Serial.println("Mencoba menghubungkan kembali...");
 
-    digitalWrite(ledPin, LOW);
+    digitalWrite(ledPin, LOW);            // LED mati saat proses reconnect
 
-    WiFi.disconnect();
-    WiFi.begin(ssid, password);
+    WiFi.disconnect();                    // Memutus koneksi lama
+    WiFi.begin(ssid, password);           // Memulai koneksi ulang
 
-    while (WiFi.status() != WL_CONNECTED) {
+    while (WiFi.status() != WL_CONNECTED) { // Menunggu koneksi ulang selesai
       delay(500);
       Serial.print(".");
     }
@@ -136,10 +136,10 @@ void loop() {
     Serial.print("IP Address : ");
     Serial.println(WiFi.localIP());
 
-    digitalWrite(ledPin, HIGH);
+    digitalWrite(ledPin, HIGH);           // LED menyala kembali setelah koneksi berhasil
   }
 
-  delay(1000);
+  delay(1000);                            // Jeda satu detik sebelum pengecekan berikutnya
 }
 ```
 
@@ -162,23 +162,23 @@ Perangkat yang tidak berwenang dapat bergabung, memakai bandwidth, mengakses lay
 Berikut adalah modifikasi program untuk menjalankan ESP8266 dalam mode AP+STA. Program ini dibuat pada sketch `Modul2_Percobaan2BModif.ino`.
 
 ```cpp
-#include <ESP8266WiFi.h>
+#include <ESP8266WiFi.h>                  // Mengaktifkan library WiFi untuk ESP8266
 
-const char* ssid = "vivo";
-const char* password = "12345678";
+const char* ssid = "vivo";              // SSID WiFi utama yang akan dihubungkan
+const char* password = "12345678";       // Password WiFi utama
 
-const char* ap_ssid = "ESP8266-PraktikumIoT";
-const char* ap_password = "12345678";
+const char* ap_ssid = "ESP8266-PraktikumIoT"; // Nama jaringan yang akan dibuat oleh ESP8266
+const char* ap_password = "12345678";          // Password AP yang dibuat oleh ESP8266
 
 void setup() {
-  Serial.begin(115200);
+  Serial.begin(115200);                  // Mengaktifkan Serial Monitor pada baud 115200
 
-  WiFi.mode(WIFI_AP_STA);
+  WiFi.mode(WIFI_AP_STA);                // Mengaktifkan mode AP + STA secara bersamaan
 
-  WiFi.begin(ssid, password);
+  WiFi.begin(ssid, password);            // Menghubungkan ESP8266 ke WiFi utama
 
   Serial.print("Menghubungkan ke WiFi");
-  while (WiFi.status() != WL_CONNECTED) {
+  while (WiFi.status() != WL_CONNECTED) { // Menunggu koneksi ke WiFi utama berhasil
     delay(500);
     Serial.print(".");
   }
@@ -186,26 +186,26 @@ void setup() {
   Serial.println();
   Serial.println("WiFi berhasil terhubung!");
   Serial.print("IP Station : ");
-  Serial.println(WiFi.localIP());
+  Serial.println(WiFi.localIP());         // Menampilkan IP dari jaringan utama
 
-  WiFi.softAP(ap_ssid, ap_password);
+  WiFi.softAP(ap_ssid, ap_password);      // Membuat Access Point dengan SSID dan password tertentu
 
-  IPAddress apIP = WiFi.softAPIP();
+  IPAddress apIP = WiFi.softAPIP();       // Mengambil IP AP yang dibuat oleh ESP8266
 
   Serial.println("Access Point aktif!");
   Serial.print("SSID : ");
-  Serial.println(ap_ssid);
+  Serial.println(ap_ssid);                // Menampilkan nama SSID AP
   Serial.print("IP Access Point : ");
-  Serial.println(apIP);
+  Serial.println(apIP);                   // Menampilkan IP Access Point
 }
 
 void loop() {
-  int jumlahClient = WiFi.softAPgetStationNum();
+  int jumlahClient = WiFi.softAPgetStationNum(); // Mengambil jumlah perangkat yang terhubung ke AP
 
   Serial.print("Jumlah perangkat terhubung: ");
-  Serial.println(jumlahClient);
+  Serial.println(jumlahClient);                // Menampilkan jumlah client yang terhubung
 
-  delay(5000);
+  delay(5000);                                 // Menunggu 5 detik sebelum mengecek lagi
 }
 ```
 
