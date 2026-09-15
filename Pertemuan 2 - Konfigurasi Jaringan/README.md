@@ -53,26 +53,9 @@ Library WiFi dipanggil dengan perintah `#include <ESP8266WiFi.h>`.
 
 #### 1. Diagram Alur
 
-Berikut diagram alur koneksi ESP8266 ke WiFi pada percobaan 2A:
+Berikut foto diagram alur koneksi ESP8266 ke WiFi pada percobaan 2A:
 
-```mermaid
-flowchart TD
-    A([MULAI]) --> B[Inisialisasi Serial & LED]
-    B --> C[Set WiFi.mode(WIFI_STA)]
-    C --> D[WiFi.begin(ssid, password)]
-    D --> E{Status koneksi?}
-    E -- Tidak --> F{WiFi sudah terhubung?}
-    F -- Tidak --> G[Delay 500 ms]
-    G --> D
-    F -- Ya --> H[Tampilkan IP, MAC, RSSI]
-    H --> I[LED ON]
-    I --> J{Periksa status koneksi}
-    J -- Tidak --> K["Cetak: 'Status Terputus' <br/> LED OFF"]
-    K --> L[delay(5000)]
-    L --> D
-    J -- Ya --> M["Cetak: 'Status Terhubung' <br/> LED ON"]
-    M --> L
-```
+![flowchart](images/flowchart.jpg)
 
 Program memulai Serial dan LED, memilih mode STA, lalu memanggil `WiFi.begin()`. Status diperiksa sampai terhubung atau batas 20 detik tercapai. Jika berhasil, IP, MAC, dan RSSI ditampilkan serta LED dinyalakan. Setelah itu `loop()` memeriksa koneksi setiap 5 detik dan memulai reconnect ketika koneksi terputus.
 
