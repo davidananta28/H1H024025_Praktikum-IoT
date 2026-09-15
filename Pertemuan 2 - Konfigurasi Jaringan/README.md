@@ -143,10 +143,6 @@ void loop() {
 }
 ```
 
-![Pengujian reconnect dengan jaringan yang salah](images/dokumentasi-2b-rangkaian.jpg)
-
-Foto ini merupakan dokumentasi rangkaian untuk percobaan 2B, sedangkan program modifikasi reconnect di atas digunakan untuk menjaga koneksi WiFi tetap aktif. Saat koneksi terputus, program menyalakan LED mati, memanggil `WiFi.disconnect()`, lalu menjalankan `WiFi.begin()` lagi sampai status `WL_CONNECTED` tercapai. Setelah itu, LED kembali menyala dan IP address ditampilkan kembali.
-
 ### Percobaan 2B
 
 #### 1. Alasan IP AP biasanya `192.168.4.1`
@@ -227,17 +223,15 @@ Hasil tersebut sesuai dengan spesifikasi: mode STA dapat terhubung dan melaporka
 
 ### Percobaan 2A
 
-```text
-NodeMCU ESP8266       LED eksternal (opsional)
-GPIO2 / D4 ----------- Anoda LED melalui resistor 220 Ohm
-GND ------------------ Katoda LED
-```
+![Skema rangkaian percobaan 2A](images/rangkaian-2a-skema.png)
 
-LED bawaan NodeMCU juga dikendalikan oleh GPIO2. Beberapa board menggunakan LED aktif-LOW, sehingga arah nyala LED dapat berbeda dari LED eksternal.
+NodeMCU ESP8266 dihubungkan ke LED eksternal pada GPIO2 / D4 dan GND. LED bawaan NodeMCU juga dikendalikan oleh GPIO2. Beberapa board menggunakan LED aktif-LOW, sehingga arah nyala LED dapat berbeda dari LED eksternal.
 
 ### Percobaan 2B
 
-Tidak ada rangkaian tambahan. ESP8266 cukup dihubungkan ke komputer melalui USB, kemudian smartphone atau laptop mencari SSID Access Point yang dibuat oleh board.
+![Skema rangkaian percobaan 2B](images/rangkaian-2b-skema.png)
+
+ESP8266 cukup dihubungkan ke komputer melalui USB, kemudian smartphone atau laptop mencari SSID Access Point yang dibuat oleh board.
 
 ## Foto Proses Praktikum atau Perangkaian
 
