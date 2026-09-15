@@ -237,11 +237,11 @@ ESP8266 cukup dihubungkan ke komputer melalui USB, kemudian smartphone atau lapt
 
 ### Percobaan 2A - LED Indikator
 
-![LED indikator menyala](images/dokumentasi-2a-led.jpg)
+![Serial Monitor koneksi berhasil](images/dokumentasi-2a-serial.jpg)
 
 LED menyala setelah ESP8266 berhasil terhubung ke jaringan WiFi.
 
-![Serial Monitor koneksi berhasil](images/dokumentasi-2a-serial.jpg)
+![Serial Monitor koneksi berhasil](images/dokumentasi-2b-serial.jpg)
 
 Serial Monitor menampilkan pesan koneksi berhasil, IP address `10.244.143.149`, MAC address `B4:E6:2D:3B:00:93`, dan RSSI.
 
