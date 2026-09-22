@@ -213,9 +213,3 @@ Tampilan ini menunjukkan bahwa klien MQTT sudah terhubung dan menerima data sens
 ![Subscriber MQTT menerima payload JSON](images/dokumentasi-3b-payload-mqtt.png)
 
 Data sensor yang diterima pada topik `unsoed/tk245004/kelompok2425/sensor` muncul dalam format JSON yang siap dipantau.
-
-#### Rangkaian ESP8266
-
-![Rangkaian NodeMCU ESP8266 pada praktikum](images/dokumentasi-3-rangkaian-nodeMCU.jpeg)
-
-Board ESP8266 dipasang di rangkaian sederhana dan terhubung ke komputer melalui USB untuk keperluan pengujian dan upload program.
