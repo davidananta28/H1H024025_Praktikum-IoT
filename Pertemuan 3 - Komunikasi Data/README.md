@@ -213,9 +213,3 @@ Data sensor yang diterima pada topik `unsoed/tk245004/kelompok2425/sensor` muncu
 ![Rangkaian NodeMCU ESP8266 pada praktikum](images/dokumentasi-3-rangkaian-nodeMCU.jpeg)
 
 Board ESP8266 dipasang di rangkaian sederhana dan terhubung ke komputer melalui USB untuk keperluan pengujian dan upload program.
-
----
-
-## Kesimpulan
-
-Percobaan 3 menunjukkan bahwa ESP8266 dapat mengirim data sensor ke server melalui dua metode utama, yaitu HTTP POST dan MQTT. HTTP cocok untuk pengiriman data ke API atau endpoint web, sedangkan MQTT lebih efisien untuk komunikasi ringan dan real-time pada perangkat IoT. Keduanya sangat penting dalam sistem monitoring dan kontrol berbasis internet.
