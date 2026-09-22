@@ -190,7 +190,7 @@ Pada percobaan MQTT, perangkat tetap menggunakan NodeMCU ESP8266 yang terhubung 
 
 ### Percobaan 3A - HTTP POST
 
-![Serial Monitor pengiriman data HTTP POST](images/dokumentasi-3a-http-post-monitor.png)
+![Serial Monitor pengiriman data HTTP POST](images/dokumentasi-3a-serial-monitor.png)
 
 Serial Monitor menampilkan data JSON yang dikirim ke endpoint `httpbin.org/post` beserta respon dari server.
 
@@ -198,13 +198,13 @@ Serial Monitor menampilkan data JSON yang dikirim ke endpoint `httpbin.org/post`
 
 #### Koneksi MQTT
 
-![MQTT Explorer terhubung ke broker HiveMQ](images/dokumentasi-3b-mqtt-connection.png)
+![MQTT Explorer terhubung ke broker HiveMQ](images/dokumentasi-3b-koneksi-mqtt.png)
 
 Pada langkah ini, client MQTT sudah terhubung ke broker `broker.hivemq.com` dan siap menerima data sensor dari ESP8266.
 
 #### Data Sensor yang Diterima
 
-![Subscriber MQTT menerima payload JSON](images/dokumentasi-3b-mqtt-subscriber.png)
+![Subscriber MQTT menerima payload JSON](images/dokumentasi-3b-payload-mqtt.png)
 
 Data sensor yang diterima pada topik `unsoed/tk245004/kelompok2425/sensor` muncul dalam format JSON yang siap dipantau.
 
