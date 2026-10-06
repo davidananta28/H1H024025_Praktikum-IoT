@@ -83,7 +83,7 @@ Library `PubSubClient` digunakan untuk komunikasi MQTT, sedangkan `ArduinoJson` 
 
 Berikut diagram alur proses penerimaan dan pemrosesan pesan pada fungsi callback:
 
-![Flowchart Percobaan 4A](images/flowchart-4a-subscribe-json.png)
+![Flowchart Percobaan 4A](images/flowchart-4a.png)
 
 Program menerima pesan MQTT melalui callback, kemudian mengubah payload menjadi String. Pesan tersebut diproses menggunakan `deserializeJson()`. Jika JSON valid, nilai `perintah` dibaca dan digunakan untuk menentukan apakah LED dinyalakan atau dimatikan.
 
@@ -367,7 +367,7 @@ void loop() {
     }
   }
 }
-
+```
 ---
 
 ## Penjelasan Singkat Detail Percobaan
