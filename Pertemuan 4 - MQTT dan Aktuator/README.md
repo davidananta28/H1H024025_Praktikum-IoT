@@ -407,7 +407,7 @@ MQTT Explorer digunakan untuk mengirim perintah melalui topic MQTT yang kemudian
 
 ### Percobaan 4B - Pertukaran Data Dua Arah
 
-![Rangkaian Percobaan 4B](images/dokumentasi-4b.jpeg)
+![Rangkaian Percobaan 4B](images/dokumentasi-4b.png)
 
 Serial Monitor menampilkan data suhu yang dikirim oleh ESP8266 serta pesan perintah yang diterima dari broker MQTT.
 MQTT Explorer menampilkan data suhu yang dikirim ESP8266 dan digunakan untuk mengirim perintah melalui topic MQTT, sehingga proses pertukaran data dua arah dapat diamati.
